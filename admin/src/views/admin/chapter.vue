@@ -11,9 +11,9 @@
 
     <tbody>
     <tr v-for="chapter in chapters">
-      <td>{{ chapter.id }}</td>
-      <td>{{ chapter.name }}</td>
-      <td>{{ chapter.courseId }}</td>
+      <td>{{chapter.id}}</td>
+      <td>{{chapter.name}}</td>
+      <td>{{chapter.courseId}}</td>
       <td>
         <div class="hidden-sm hidden-xs btn-group">
           <button class="btn btn-xs btn-success">
@@ -73,28 +73,28 @@
 </template>
 
 <script>
-export default {
-  name: "chapter",
-  data: function () {
-    return {
-      chapters: []
-    }
-  },
-  mounted: function () {
-    let _this = this;
-    _this.list();
-    // sidebar激活样式方法一
-    // this.$parent.activeSidebar("business-chapter-sidebar");
-
-  },
-  methods: {
-    list() {
+  export default {
+    name: "chapter",
+    data: function() {
+      return {
+        chapters: []
+      }
+    },
+    mounted: function() {
       let _this = this;
-      _this.$ajax.get('http://127.0.0.1:9002/business/admin/chapter/list').then((response) => {
-        console.log("查询大章列表结果：", response);
-        _this.chapters = response.data;
-      })
+      _this.list();
+      // sidebar激活样式方法一
+      // this.$parent.activeSidebar("business-chapter-sidebar");
+
+    },
+    methods: {
+      list() {
+        let _this = this;
+        _this.$ajax.get('http://127.0.0.1:9000/business/admin/chapter/list').then((response)=>{
+          console.log("查询大章列表结果：", response);
+          _this.chapters = response.data;
+        })
+      }
     }
   }
-}
 </script>

@@ -58,7 +58,7 @@ public class ChapterService {
     /**
      * 新增
      */
-    public void insert(Chapter chapter) {
+    private void insert(Chapter chapter) {
         chapter.setId(UuidUtil.getShortUuid());
         chapterMapper.insert(chapter);
     }
@@ -66,7 +66,7 @@ public class ChapterService {
     /**
      * 更新
      */
-    public void update(Chapter chapter) {
+    private void update(Chapter chapter) {
         chapterMapper.updateByPrimaryKey(chapter);
     }
 

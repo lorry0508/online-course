@@ -12,7 +12,7 @@ public class DbUtil {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/courseimooc";
+            String url = "jdbc:mysql://localhost:3306/courseimooc?characterEncoding=UTF8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8";
             String user = "courseimooc";
             String pass = "courseimooc";
             conn = DriverManager.getConnection(url, user, pass);

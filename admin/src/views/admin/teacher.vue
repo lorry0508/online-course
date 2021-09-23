@@ -144,6 +144,7 @@
       _this.list(1);
       // sidebar激活样式方法一
       // this.$parent.activeSidebar("business-teacher-sidebar");
+
     },
     methods: {
       /**
@@ -235,7 +236,7 @@
 
       afterUpload(resp) {
         let _this = this;
-        let image = resp.content;
+        let image = resp.content.path;
         _this.teacher.image = image;
       }
     }

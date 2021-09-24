@@ -1,130 +1,123 @@
 <template>
   <div>
-    <h4 className="lighter">
-      <i className="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/course" className="pink"> {{ cou rse.name }}</router-link>
-      ：
-      <i className="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/chapter" className="pink"> {{ cha pter.name }}</router-link>
-    </h4>
-    <hr>
     <p>
-      <button v-on:click="add()" className="btn btn-white btn-default btn-round">
-        <i className="ace-icon fa fa-edit"></i>
+      <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-edit"></i>
         新增
       </button>
       &nbsp;
-      <button v-on:click="list(1)" className="btn btn-white btn-default btn-round">
-        <i className="ace-icon fa fa-refresh"></i>
+      <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-refresh"></i>
         刷新
       </button>
     </p>
 
     <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
 
-    <table id="simple-table" className="table  table-bordered table-hover">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>标题</th>
-        <th>视频</th>
-        <th>时长</th>
-        <th>收费</th>
-        <th>顺序</th>
-        <th>操作</th>
-      </tr>
-      </thead>
+    <div class="row">
+      <div v-for="teacher in teachers" class="col-md-3 center">
+        <div>
+          <span class="profile-picture">
+            <img v-show="!teacher.image" class="editable img-responsive editable-click editable-empty" src="/static/image/讲师头像/头像1.jpg" v-bind:title="teacher.intro"/>
+            <img v-show="teacher.image" class="editable img-responsive editable-click editable-empty" v-bind:src="teacher.image" v-bind:title="teacher.intro"/>
+          </span>
 
-      <tbody>
-      <tr v-for="section in sections">
-        <td>{{ se ction.id }}</td>
-        <td>{{ se ction.title }}</td>
-        <td>{{ se ction.video }}</td>
-        <td>{{ se ction.time | formatSecond }}</td>
-        <td>{{ SE CTION_CHARGE | optionKV(section.charge) }}</td>
-        <td>{{ se ction.sort }}</td>
-        <td>
-          <div className="hidden-sm hidden-xs btn-group">
-            <button v-on:click="edit(section)" className="btn btn-xs btn-info">
-              <i className="ace-icon fa fa-pencil bigger-120"></i>
-            </button>
-            <button v-on:click="del(section.id)" className="btn btn-xs btn-danger">
-              <i className="ace-icon fa fa-trash-o bigger-120"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+          <div class="space-4"></div>
 
-    <div id="form-modal" className="modal fade" tabIndex="-1" role="dialog">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-            </button>
-            <h4 className="modal-title">表单</h4>
+          <div class="width-85 label label-info label-xlg arrowed-in arrowed-in-right">
+            <div class="inline position-relative">
+              <a href="javascript:;" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                <i class="ace-icon fa fa-circle light-green"></i>
+                &nbsp;
+                <span class="white">{{teacher.position}}</span>
+              </a>
+            </div>
           </div>
-          <div className="modal-body">
-            <form className="form-horizontal">
-              <div className="form-group">
-                <label className="col-sm-2 control-label">标题</label>
-                <div className="col-sm-10">
-                  <input v-model="section.title" className="form-control">
+        </div>
+
+        <div class="space-6"></div>
+
+        <a href="javascript:;" class="text-info bigger-110" v-bind:title="teacher.motto">
+          <i class="ace-icon fa fa-user"></i>
+          {{teacher.name}}【{{teacher.nickname}}】
+        </a>
+
+        <div class="space-6"></div>
+
+        <div class="profile-social-links align-center">
+          <button v-on:click="edit(teacher)" class="btn btn-xs btn-info">
+            <i class="ace-icon fa fa-pencil bigger-120"></i>
+          </button>
+          &nbsp;
+          <button v-on:click="del(teacher.id)" class="btn btn-xs btn-danger">
+            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+          </button>
+        </div>
+
+        <div class="hr hr16 dotted"></div>
+
+      </div>
+    </div>
+
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">表单</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">姓名</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.name" class="form-control">
                 </div>
               </div>
-              <div className="form-group">
-                <label className="col-sm-2 control-label">课程</label>
-                <div className="col-sm-10">
-                  <p className="form-control-static">{{ co urse.name }}</p>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">昵称</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.nickname" class="form-control">
                 </div>
               </div>
-              <div className="form-group">
-                <label className="col-sm-2 control-label">大章</label>
-                <div className="col-sm-10">
-                  <p className="form-control-static">{{ ch apter.name }}</p>
-                </div>
-              </div>
-              <div className="form-group">
-                <label className="col-sm-2 control-label">视频</label>
-                <div className="col-sm-10">
-                  <file v-bind:input-id="'video-upload'"
-                        v-bind:text="'上传视频'"
-                        v-bind:suffixs="['mp4']"
-                        v-bind:use="FILE_USE.COURSE.key"
+              <div class="form-group">
+                <label class="col-sm-2 control-label">头像</label>
+                <div class="col-sm-10">
+                  <file v-bind:input-id="'image-upload'"
+                        v-bind:text="'上传头像'"
+                        v-bind:suffixs="['jpg', 'jpeg', 'png']"
+                        v-bind:use="FILE_USE.TEACHER.key"
                         v-bind:after-upload="afterUpload"></file>
-                  <div v-show="section.video" className="row">
-                    <div className="col-md-9">
-                      <video v-bind:src="section.video" id="video" controls="controls"></video>
+                  <div v-show="teacher.image" class="row">
+                    <div class="col-md-4">
+                      <img v-bind:src="teacher.image" class="img-responsive">
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="form-group">
-                <label className="col-sm-2 control-label">时长</label>
-                <div className="col-sm-10">
-                  <input v-model="section.time" className="form-control">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">职位</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.position" class="form-control">
                 </div>
               </div>
-              <div className="form-group">
-                <label className="col-sm-2 control-label">收费</label>
-                <div className="col-sm-10">
-                  <select v-model="section.charge" className="form-control">
-                    <option v-for="o in SECTION_CHARGE" v-bind:value="o.key">{{ o.value }}</option>
-                  </select>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">座右铭</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.motto" class="form-control">
                 </div>
               </div>
-              <div className="form-group">
-                <label className="col-sm-2 control-label">顺序</label>
-                <div className="col-sm-10">
-                  <input v-model="section.sort" className="form-control">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">简介</label>
+                <div class="col-sm-10">
+                  <textarea v-model="teacher.intro" class="form-control" rows="5"></textarea>
                 </div>
               </div>
             </form>
           </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-default" data-dismiss="modal">取消</button>
-            <button v-on:click="save()" type="button" className="btn btn-primary">保存</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button v-on:click="save()" type="button" class="btn btn-primary">保存</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -133,148 +126,119 @@
 </template>
 
 <script>
-import Pagination from "../../components/pagination";
-import File from "../../components/file";
-
-export default {
-  components: {Pagination, File},
-  name: "business-section",
-  data: function () {
-    return {
-      section: {},
-      sections: [],
-      SECTION_CHARGE: SECTION_CHARGE,
-      FILE_USE: FILE_USE,
-      course: {},
-      chapter: {},
-    }
-  },
-  mounted: function () {
-    let _this = this;
-    _this.$refs.pagination.size = 5;
-    let course = SessionStorage.get(SESSION_KEY_COURSE) || {};
-    let chapter = SessionStorage.get(SESSION_KEY_CHAPTER) || {};
-    if (Tool.isEmpty(course) || Tool.isEmpty(chapter)) {
-      _this.$router.push("/welcome");
-    }
-    _this.course = course;
-    _this.chapter = chapter;
-    _this.list(1);
-    // sidebar激活样式方法一
-    this.$parent.activeSidebar("business-course-sidebar");
-
-  },
-  methods: {
-    /**
-     * 点击【新增】
-     */
-    add() {
-      let _this = this;
-      _this.section = {};
-      $("#form-modal").modal("show");
-    },
-
-    /**
-     * 点击【编辑】
-     */
-    edit(section) {
-      let _this = this;
-      _this.section = $.extend({}, section);
-      $("#form-modal").modal("show");
-    },
-
-    /**
-     * 列表查询
-     */
-    list(page) {
-      let _this = this;
-      Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/list', {
-        page: page,
-        size: _this.$refs.pagination.size,
-        courseId: _this.course.id,
-        chapterId: _this.chapter.id
-      }).then((response) => {
-        Loading.hide();
-        let resp = response.data;
-        _this.sections = resp.content.list;
-        _this.$refs.pagination.render(page, resp.content.total);
-
-      })
-    },
-
-    /**
-     * 点击【保存】
-     */
-    save(page) {
-      let _this = this;
-
-      // 保存校验
-      if (1 != 1
-          || !Validator.require(_this.section.title, "标题")
-          || !Validator.length(_this.section.title, "标题", 1, 50)
-          || !Validator.length(_this.section.video, "视频", 1, 200)
-      ) {
-        return;
+  import Pagination from "../../components/pagination";
+  import File from "../../components/file";
+  export default {
+    components: {Pagination, File},
+    name: "business-teacher",
+    data: function() {
+      return {
+        teacher: {},
+        teachers: [],
+        FILE_USE: FILE_USE
       }
-      _this.section.courseId = _this.course.id;
-      _this.section.chapterId = _this.chapter.id;
-
-      Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response) => {
-        Loading.hide();
-        let resp = response.data;
-        if (resp.success) {
-          $("#form-modal").modal("hide");
-          _this.list(1);
-          Toast.success("保存成功！");
-        } else {
-          Toast.warning(resp.message)
-        }
-      })
     },
-
-    /**
-     * 点击【删除】
-     */
-    del(id) {
+    mounted: function() {
       let _this = this;
-      Confirm.show("删除小节后不可恢复，确认删除？", function () {
+      _this.$refs.pagination.size = 5;
+      _this.list(1);
+      // sidebar激活样式方法一
+      // this.$parent.activeSidebar("business-teacher-sidebar");
+
+    },
+    methods: {
+      /**
+       * 点击【新增】
+       */
+      add() {
+        let _this = this;
+        _this.teacher = {};
+        $("#form-modal").modal("show");
+      },
+
+      /**
+       * 点击【编辑】
+       */
+      edit(teacher) {
+        let _this = this;
+        _this.teacher = $.extend({}, teacher);
+        $("#form-modal").modal("show");
+      },
+
+      /**
+       * 列表查询
+       */
+      list(page) {
+        let _this = this;
         Loading.show();
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/section/delete/' + id).then((response) => {
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/teacher/list', {
+          page: page,
+          size: _this.$refs.pagination.size,
+        }).then((response)=>{
+          Loading.hide();
+          let resp = response.data;
+          _this.teachers = resp.content.list;
+          _this.$refs.pagination.render(page, resp.content.total);
+
+        })
+      },
+
+      /**
+       * 点击【保存】
+       */
+      save() {
+        let _this = this;
+
+        // 保存校验
+        if (1 != 1
+          || !Validator.require(_this.teacher.name, "姓名")
+          || !Validator.length(_this.teacher.name, "姓名", 1, 50)
+          || !Validator.length(_this.teacher.nickname, "昵称", 1, 50)
+          || !Validator.length(_this.teacher.image, "头像", 1, 100)
+          || !Validator.length(_this.teacher.position, "职位", 1, 50)
+          || !Validator.length(_this.teacher.motto, "座右铭", 1, 50)
+          || !Validator.length(_this.teacher.intro, "简介", 1, 500)
+        ) {
+          return;
+        }
+
+        Loading.show();
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/teacher/save', _this.teacher).then((response)=>{
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
+            $("#form-modal").modal("hide");
             _this.list(1);
-            Toast.success("删除成功！");
+            Toast.success("保存成功！");
+          } else {
+            Toast.warning(resp.message)
           }
         })
-      });
-    },
+      },
 
-    afterUpload(resp) {
-      let _this = this;
-      let video = resp.content.path;
-      _this.section.video = video;
-      _this.getTime();
-    },
+      /**
+       * 点击【删除】
+       */
+      del(id) {
+        let _this = this;
+        Confirm.show("删除讲师后不可恢复，确认删除？", function () {
+          Loading.show();
+          _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/teacher/delete/' + id).then((response)=>{
+            Loading.hide();
+            let resp = response.data;
+            if (resp.success) {
+              _this.list(1);
+              Toast.success("删除成功！");
+            }
+          })
+        });
+      },
 
-    /**
-     * 获取时长
-     */
-    getTime() {
-      let _this = this;
-      let ele = document.getElementById("video");
-      _this.section.time = parseInt(ele.duration, 10);
-    },
+      afterUpload(resp) {
+        let _this = this;
+        let image = resp.content.path;
+        _this.teacher.image = image;
+      }
+    }
   }
-}
 </script>
-
-<style scoped>
-video {
-  width: 100%;
-  height: auto;
-  margin-top: 10px;
-}
-</style>

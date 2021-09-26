@@ -18,6 +18,8 @@
         <th>后缀</th>
         <th>大小</th>
         <th>用途</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
       </tr>
       </thead>
 
@@ -29,6 +31,8 @@
         <td>{{file.suffix}}</td>
         <td>{{file.size | formatFileSize}}</td>
         <td>{{FILE_USE | optionKV(file.use)}}</td>
+        <td>{{file.createdAt}}</td>
+        <td>{{file.updatedAt}}</td>
       </tr>
       </tbody>
     </table>
@@ -49,7 +53,7 @@
     },
     mounted: function() {
       let _this = this;
-      _this.$refs.pagination.size = 5;
+      _this.$refs.pagination.size = 10;
       _this.list(1);
       // sidebar激活样式方法一
       // this.$parent.activeSidebar("file-file-sidebar");
